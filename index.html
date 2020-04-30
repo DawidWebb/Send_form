@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+.formField{
+    font: inherit; 
+    border: 1px solid #ccc; 
+    border-radius: 3px; 
+    margin: 3px 0 10px 0; 
+    padding: 3px 0
+    };
+textarea.formField{
+    width: 300px; 
+    height: 70px
+    };
+#sendBtn{
+    cursor:pointer;
+    background: #ccc; 
+    background: linear-gradient(#ddd 0, #eee 100%); 
+    border: 1px solid #ccc; 
+    line-height: 32px; 
+    font-size: 14px;
+    padding: 0 25px; 
+    border-radius: 3px
+    };
+
+#send_form_status{
+    border: 1px dashed #ccc;
+    display: none; 
+    padding: 0 10px; 
+    margin: 10px 0
+    };
+.status_ok{
+    color: #060
+    };
+.status_err{
+    color: #F00
+    };
+    </style>
+</head>
+<body>
+    <h2>Formularz kontaktowy</h2>
+    <div id="send_form_status"></div>
+    <form method="post" action="/send_form.php" id="contact_form">
+         <div><label for="name">Imię i nazwisko</label></div>
+         <div><input type="text" name="name" id="name" class="formField" /></div>
+         <div><label for="phone">Numer telefonu</label></div>
+         <div><input type="text" name="phone" id="phone" class="formField" /></div>
+         <div><label for="email">Adres email</label></div>
+         <div><input type="text" name="email" id="email" class="formField" /></div>
+         <div><label for="message">Treść wiadomości</label></div>
+         <div><textarea name="message" id="message" class="formField"></textarea></div>
+         <div><button id="sendBtn">Wyślij</button></div>
+    </form>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script>
+$(document).ready(function() {
+  $("html").on("submit","#contact_form",function(e){
+    e.preventDefault();
+    $("#send_form_status").html('').hide();
+    var data=$("#contact_form").serialize();
+    $.post("/send_form.php",data,function(res){
+      $("#send_form_status").html(res.msg).show();
+      if(res.status==1){ 
+        $("#contact_form")[0].reset();
+      } 
+    });
+  });
+});
+</script>
+</body>
+</html>
